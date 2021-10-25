@@ -1,112 +1,97 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React from 'react'
+import { View, Text } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator} from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Other from './src/screens/other/other'
+import Tichdiem from './src/screens/tichdiem'
+import Login from './src/screens/login'
+import Home from './src/screens/home'
+import Order from './src/screens/order'
+import Store from './src/screens/store'
+import A from './a'
+export default function App() {
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  const HomeStack = createNativeStackNavigator();
+  const OrderStack = createNativeStackNavigator();
+  const StoreStack = createNativeStackNavigator();
+  const TichdiemStack = createNativeStackNavigator();
+  const OtherStack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+  function HomeStackScreen() {
+    return (
+      <HomeStack.Navigator >
+        <HomeStack.Screen name="Home" component={Home} />
+        <HomeStack.Screen name="Login" component={Login} options={{
+            headerShown: false,
+          }}/>
+      </HomeStack.Navigator>
+    );
+  }
+  function OrderStackScreen() {
+    return (
+      <OrderStack.Navigator>
+        <HomeStack.Screen name="Order" component={Order} />
+      </OrderStack.Navigator>
+    );
+  }
+  function StoreStackScreen() {
+    return (
+      <StoreStack.Navigator>
+        <HomeStack.Screen name="Store" component={Store} />
+      </StoreStack.Navigator>
+    );
+  }
+  function TichdiemStackScreen() {
+    return (
+      <TichdiemStack.Navigator>
+        <HomeStack.Screen name="Tichdiem" component={Tichdiem} />
+      </TichdiemStack.Navigator>
+    );
+  }
+  function OtherStackScreen() {
+    return (
+      <OtherStack.Navigator>
+        <HomeStack.Screen name="Other" component={Other} />
+      </OtherStack.Navigator>
+    );
+  }
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+    <NavigationContainer >
+      <Tab.Navigator screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Trang chủ') {
+            iconName = focused
+              ? 'home'
+              : 'home-outline';
+          } else if (route.name === 'Đặt hàng') {
+            iconName = focused ? 'cafe' : 'cafe-outline';
+          } else if (route.name === 'Cửa hàng') {
+            iconName = focused ? 'briefcase' : 'briefcase-outline';
+          } else if (route.name === 'Tích điểm') {
+            iconName = focused ? 'gift' : 'gift-outline';
+          } else if (route.name === 'Khác') {
+            iconName = focused ? 'menu' : 'menu-outline';
+          }
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+        headerShown: false
+        })}
+      >
+        <Tab.Screen name="Trang chủ" component={HomeStackScreen} />
+        <Tab.Screen name="Đặt hàng" component={OrderStackScreen} />
+        <Tab.Screen name="Cửa hàng" component={StoreStackScreen}/>
+        <Tab.Screen name="Tích điểm" component={TichdiemStackScreen} />
+        <Tab.Screen name="Khác" component={OtherStackScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  
+  )
+}
