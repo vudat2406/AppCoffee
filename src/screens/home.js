@@ -1,7 +1,8 @@
-import React, {useState}from 'react'
+import React, {useState,useEffect} from 'react'
 import { View, Text,TouchableOpacity,Button,Image,ImageBackground,Dimensions,ScrollView,StyleSheet,FlatList} from 'react-native'
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 const {width}= Dimensions.get("window");
 
@@ -49,36 +50,120 @@ const data = [
       image:require('../../images/4.jpg'),
     },  
 ];
-const Item=({name,price,anh})=>(
-  <View style={{marginBottom:10}}>
-  <View style={{flexDirection:'row',marginLeft:15, alignItems:'center'}}>
-    <Image 
-      source={anh}
-      style={{width:70,height:80,borderRadius:10}}
-    />
-    <View style={{flexDirection:'column',margin:10}}>
-      <Text style={{color:'black'}}>Được yêu thích <Icon name="heart" size={14} color='#D8518A'/></Text>
-      <Text style={{color:'black',fontWeight:'bold', width:140}}>{name}</Text>
-    </View>
-    <TouchableOpacity style={{width:90,height:40,backgroundColor:'#EA8022',borderRadius:20,justifyContent:'center',alignItems:'center'}}>
-      <Text style={{color:'white'}}>{price}</Text>
-    </TouchableOpacity>
-  </View>
-  </View>
-);
+const listTab=[
+  {
+    id:1,
+    status:'Ưu đãi đặc biệt'
+  },
+  {
+    id:2,
+    status:'Cập nhật từ nhà'
+  },
+  {
+    status:'#CoffeeLover'
+  }
+];
+const dataproduct=[
+  {
+    name:'CUỐI THÁNG VUI TƯƠI-RỘN RÀNG DEAL ĐỈNH',
+    date:'26/10',
+    status:'Ưu đãi đặc biệt'
+  },
+  {
+    name:'ĐỔI BEAN NHANH LẤY ƯU ĐÃI XỊN',
+    date:'18/10',
+    status:'Ưu đãi đặc biệt'
+  },
+  {
+    name:'DEAL SIÊU YÊU CHIỀU BẠN HẾT SỨC',
+    date:'16/10',
+    status:'Ưu đãi đặc biệt'
+  },
+  {
+    name:'RỘN RÀNG GỌI MÓN, NHÀ & MOMO DEAL XỊN',
+    date:'19/10',
+    status:'Ưu đãi đặc biệt'
+  },
+  {
+    name:'CHAI FRESH LUÔN BÊN BẠN TRONG MỌI KHOẢNH KHẮC',
+    date:'19/10',
+    status:'Cập nhật từ nhà'
+  },
+  {
+    name:'CHAI FRESH: THAY LỜI YÊU DÀNH TẶNG NGƯỜI PHỤ NỮ ĐẶC BIỆT',
+    date:'19/10',
+    status:'Cập nhật từ nhà'
+  },
+  {
+    name:'1',
+    date:'19/10',
+    status:'Cập nhật từ nhà'
+  },
+  {
+    name:'2',
+    date:'19/10',
+    status:'Cập nhật từ nhà'
+  },
+  {
+    name:'3',
+    date:'19/10',
+    status:'#CoffeeLover'
+  },
+  {
+    name:'4',
+    date:'19/10',
+    status:'#CoffeeLover'
+  },
+  {
+    name:'5',
+    date:'19/10',
+    status:'#CoffeeLover'
+  },
+  {
+    name:'6',
+    date:'19/10',
+    status:'#CoffeeLover'
+  }
+];
 const ItemImage = ({ image }) => (
   <Image source ={image}
     style={{width:width-40,height:170, resizeMode:'cover' }}
   />
 );
 export default function home({navigation}) {
+  // useEffect(() => {
+  //   const getProductList = async () => {
+  //     // console.tron.log('qq')
+  //     console.log('qq')
+  //     try {
+  //       const response = await axios.get('http://forever21.hungvu.net/get-products');
+  //       // const response = await getProduct()
+  //       // console.tron.log('data', response);
+  //       console.log('data', response);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+
+  //   getProductList()
+
+  // }, [])
+  
   const sign=()=>navigation.navigate('Login');
-  const renderItem = ({ item }) => (
-    <Item anh={item.anh} price={item.price} name={item.name} />
-  );
   const renderItemImage = ({ item }) => (
     <ItemImage image={item.image} />
   );
+  const [status,setStatus] = useState('Ưu đãi đặc biệt')
+  const [dataList,setDatalist]=useState(dataproduct)
+  const setStatusFilter=status =>{
+    setDatalist([...dataproduct.filter(e=>e.status===status)])
+
+    setStatus(status)
+    
+  }
+  useEffect(() => {
+      setDatalist([...dataproduct.filter(e=>e.status===status)])
+  }, [])
   return (
     <ParallaxScrollView
       backgroundColor="#D8B587"
@@ -137,13 +222,82 @@ export default function home({navigation}) {
       </View>
       <View style={{margin:20,borderRadius:8,height:340,borderWidth:0.5,width:'90%'}}>
         <Text style={{margin:15,color:'black',fontSize:17,fontWeight:'bold'}}>Gợi ý riêng cho Hi:</Text>
-        <FlatList
-          data={Data}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => item.id}
-        />
+        {
+          Data.map((e,k)=>
+            <View style={{marginBottom:10}} key={k}>
+              <TouchableOpacity>
+                <View style={{flexDirection:'row',marginLeft:15, alignItems:'center'}}>
+                  <Image 
+                    source={e.anh}
+                    style={{width:70,height:80,borderRadius:10}}
+                  />
+                  <View style={{flexDirection:'column',margin:10}}>
+                    <Text style={{color:'black'}}>Được yêu thích <Icon name="heart" size={14} color='#D8518A'/></Text>
+                    <Text style={{color:'black',fontWeight:'bold', width:140}}>{e.name}</Text>
+                  </View>
+                  <TouchableOpacity style={{width:90,height:40,backgroundColor:'#EA8022',borderRadius:20,justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{color:'white'}}>{e.price}</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )
+        }
       </View>
+      <Text style={{marginLeft:20,marginBottom:10,fontWeight:'bold',color:'black',fontSize:17}}>Khám phá thêm <Icon name="moon-o" size={20} color="#fc2"/></Text>
+      <View style={styles.listTab}>
+        {
+          listTab.map((e,i)=>(
+            <TouchableOpacity key={i} style={[styles.btn,status===e.status && styles.btnActive ]}
+            onPress={()=>setStatusFilter(e.status)}
+            >
+              <Text style={[styles.text,status===e.status && styles.textActive ]}>{e.status}</Text>
+            </TouchableOpacity>
+          ))
+        }
+      </View>
+      <View style={{marginLeft:10,flexDirection:'row',flexWrap: 'wrap'}}>
+        {
+          dataList.map((e,i)=>(
+            <View key={i} style={{margin:10,width:160,borderRadius:8}}>
+              <View style={{flexDirection:'column'}}>
+                <Image
+                  style={{width:160,height:160,borderRadius:8}}
+                  source={{uri:'https://i.imgur.com/lBAdcNP.jpg'}}
+                />
+                <Text style={{color:'black',fontSize:14,fontWeight:'500'}}>{e.name}</Text>
+                <View style={{flexDirection:'row'}}>
+                  <Icon name="calendar" size={15} style={{marginRight:10}} />
+                  <Text style={{color:'black',fontSize:12}}>{e.date}</Text>
+                </View>
+              </View>
+            </View>
+          ))
+        }
+      </View>
+      
     </ParallaxScrollView>
   )
 }
+const styles = StyleSheet.create({
+  listTab: {
+    paddingLeft:20,
+    flexDirection:'row',
+  },
+  btn:{
+    borderRadius:25,
+    padding:6,
+    marginRight:5,
+    color:'black'
+  },
+  text:{
+    color:'black',
+    fontWeight:'bold'
+  },
+  btnActive:{
+    backgroundColor:'#eee'
+  },
+  textActive:{
+    color:'orange'
+  }
+})

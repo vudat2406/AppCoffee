@@ -26,7 +26,7 @@ export default function App() {
         <HomeStack.Screen name="Home" component={Home} />
         <HomeStack.Screen name="Login" component={Login} options={{
             headerShown: false,
-          }}/>
+        }}/>
       </HomeStack.Navigator>
     );
   }
